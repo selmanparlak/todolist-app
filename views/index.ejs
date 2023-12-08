@@ -1,0 +1,209 @@
+<%- include("partials/header.ejs") %>
+  <!-- todo: -->
+  <!-- should be displayed even when data is added or refreshed the page when the checkbox is checked on the page -->
+
+  <body>
+    <div class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center">
+      <div class="list-group">
+        <div class="card text-white bg-dark mb-3" id="card-width">
+          <div class="card-header bg-dark text-white text-center">
+            <h5 class="mb-0 text-warning">
+              <%= locals.workData ? 'Work List' : locals.date ? date : '' %>
+            </h5>
+          </div>
+          <label class="list-group-item d-flex gap-3">
+            <% if (locals.workData) {%>
+              <form action="/create" method="post" class="d-flex w-100 justify-content-between align-items-center">
+                <input type="text" class="bg-transparent" maxlength="50" id="title" name="title"
+                  placeholder="Enter a title." required>
+                <input type="hidden" name="workData" value="workData">
+                <button type="submit" class="btn btn-secondary bg-transparent border-0 ">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                    class="bi bi-plus-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                    <path
+                      d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                  </svg>
+                </button>
+              </form>
+              <% } else if(locals.todayData){ %>
+                <form action="/create" method="post" class="d-flex w-100 justify-content-between align-items-center">
+                  <input type="text" maxlength="50" class="bg-transparent" id="title" name="title"
+                    placeholder="Enter a title." required>
+                  <input type="hidden" name="todayData" value="todayData">
+                  <button type="submit" class="btn btn-secondary bg-transparent border-0 ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                      class="bi bi-plus-circle" viewBox="0 0 16 16">
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                      <path
+                        d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                    </svg>
+                  </button>
+                </form>
+                <% } %>
+          </label>
+          <div class="card-body" id="card-height">
+            <% if (locals.workData ) { %>
+              <% for( let index=0; index < workData.length; index++ ) { %>
+                <!-- View Modal -->
+                <div class="modal fade bd-example-modal-lg" id="viewModal<%= workData[index].index %>" tabindex="-1"
+                  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title text-break" id="exampleModalLabel">
+                          <%= workData[index].title %>
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body modal-css">
+                        <div class="d-flex align-items-center justify-content-end">
+                          <div>
+                            <div>
+                              <span class="fw-bold text-break">
+                                <small class="d-block text-secondary ">
+                                  <svg id="svg-grey" style="margin-bottom: 2px" xmlns="http://www.w3.org/2000/svg"
+                                    width="16" height="16" fill="currentColor" class="bi bi-calendar3"
+                                    viewBox="0 0 16 16">
+                                    <path
+                                      d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z" />
+                                    <path
+                                      d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+                                  </svg>
+                                  <%= workData[index].date %>
+                                </small>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <p class="text-left font-weight-normal ">
+                          <%- workData[index].subject ? workData[index].subject
+                            : '<h5 class="text-warning text-center">Please write a message.</h5>' %>
+                        </p>
+                      </div>
+                      <div class="modal-footer">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Update Modal -->
+                <div class="modal fade bd-example-modal-lg" id="updateModal<%= workData[index].index %>" tabindex="-1"
+                  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form action="/edit" method="post">
+                          <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Title:</label>
+                            <br>
+                            <input type="text" class="bg-transparent form-control" maxlength="50" name="title"
+                              value="<%= workData[index].title %>" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="message-text" class="col-form-label">Message:</label>
+                            <br>
+                            <textarea name="subject" class="form-control bg-transparent"
+                              required><%= workData[index].subject %></textarea>
+
+                          </div>
+                          <input type="hidden" name="index" value="<%= workData[index].index %>">
+                          <input type="hidden" name="workData" value="workData">
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" id="buttonid" class="btn btn-primary">Save changes</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <label class="list-group-item d-flex gap-2 justify-content-between align-items-start">
+                  <div>
+                    <div>
+                      <span class="fw-bold text-break">
+                        <%= workData[index].title %>
+                          <small class="d-block text-secondary ">
+                            <svg id="svg-grey" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                              fill="currentColor" class="bi bi-calendar3" viewBox="0 0 16 16">
+                              <path
+                                d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z" />
+                              <path
+                                d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+                            </svg>
+                            <%= workData[index].date %>
+                          </small>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <button data-bs-toggle="modal" data-target=".bd-example-modal-lg"
+                      data-bs-target="#updateModal<%= workData[index].index %>" type="button"
+                      class="btn btn-sm bg-transparent border-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-pen" viewBox="0 0 16 16">
+                        <path
+                          d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z">
+                        </path>
+                      </svg>
+                    </button>
+                    <button type="button" class="btn bg-transparent btn-sm border-0" data-bs-toggle="modal"
+                      data-target=".bd-example-modal-lg" data-bs-target="#viewModal<%= workData[index].index %>">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-file-earmark-text-fill" viewBox="0 0 16 16">
+                        <path
+                          d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zM4.5 9a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1h-7zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 1 0-1h4a.5.5 0 0 1 0 1h-4z">
+                        </path>
+                      </svg>
+                    </button>
+                    <form action="/delete" method="post" class="d-flex gap-2 align-items-center">
+                      <input type="hidden" name="index" value="<%= workData[index].index%>">
+                      <input type="hidden" name="workData" value="workData">
+                      <button type="submit" class="btn bg-transparent btn-sm border-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                          class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                          <path
+                            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
+                        </svg>
+                      </button>
+                    </form>
+                  </div>
+                </label>
+                <%} %>
+                  <% } else if(locals.todayData){ %>
+                    <% for( let index=0; index < todayData.length; index++ ) { %>
+                      <label class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                          <input class="form-check-input flex-shrink-0 deneme" value="<%= todayData[index].index %>"
+                            type="checkbox" name="checkbox" id="checkbox_<%= todayData[index].index %>"
+                            style="font-size: 1.375em; margin-right: 1vh;"
+                            onclick="toggleTextDecoration('<%=todayData[index].index %>')">
+                          <span class="pt-1 form-checked-content text-break" id="text_<%= todayData[index].index %>"
+                            style="text-decoration: none;">
+                            <%= todayData[index].title %>
+                          </span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                          <form action="/delete" method="post" class="d-flex gap-2 align-items-center">
+                            <input type="hidden" name="index" value="<%= todayData[index].index%>">
+                            <input type="hidden" name="todayData" value="todayData">
+                            <button type="submit" class="btn  bg-transparent btn-sm rounded-circle border-0">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                                <path
+                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
+                              </svg>
+                            </button>
+                          </form>
+                        </div>
+                      </label>
+                      <% } %>
+                        <%} %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%- include("partials/footer.ejs") %>
